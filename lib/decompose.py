@@ -413,12 +413,12 @@ def dictionary(X, W2, Y,alpha=1e-4, rank=None, DEBUG=0, B2=None, rank_tol=.1, ve
         grp_lasso = False
     if norank:
         alpha = cfgs.alpha / c**dcfgs.dic.layeralpha
-
+    Z={}
     if grp_lasso:
         reX = X.reshape((N, -1))
         ally = Y.reshape((N,-1))
         samples = np.random.choice(N, N//10, replace=False)
-        Z = reX[samples].copy()
+        Z[0] = reX[samples].copy()
         reY = ally[samples].copy()
 
     else:
@@ -431,7 +431,7 @@ def dictionary(X, W2, Y,alpha=1e-4, rank=None, DEBUG=0, B2=None, rank_tol=.1, ve
         if dcfgs.dic.alter:
             W2_std = np.linalg.norm(reW2.reshape(c, -1), axis=1)
         # c Nn
-        Z = np.matmul(reX, reW2).reshape((c, -1)).T
+        Z[0] = np.matmul(reX, reW2).reshape((c, -1)).T
 
         # Nn
         reY = Y[samples].reshape(-1)
@@ -466,7 +466,7 @@ def dictionary(X, W2, Y,alpha=1e-4, rank=None, DEBUG=0, B2=None, rank_tol=.1, ve
         return idxs, tmp
 
     def updateW2(idxs):
-        nonlocal Z
+        #nonlocal Z
         tmp_r = sum(idxs)
         reW2, _ = fc_kernel((X[:,idxs, :,:]).reshape(N, tmp_r*h*w), Y)
         reW2 = reW2.T.reshape(tmp_r, h*w, n)
@@ -479,7 +479,7 @@ def dictionary(X, W2, Y,alpha=1e-4, rank=None, DEBUG=0, B2=None, rank_tol=.1, ve
         newshape[0] = c
         newreW2 = np.zeros(newshape, dtype=reW2.dtype)
         newreW2[idxs, ...] = reW2
-        Z = np.matmul(reX, newreW2).reshape((c, -1)).T
+        Z[0] = np.matmul(reX, newreW2).reshape((c, -1)).T
         if 0:
             print(_solver.coef_)
         return reW2
@@ -548,12 +548,12 @@ def dictionary(X, W2, Y,alpha=1e-4, rank=None, DEBUG=0, B2=None, rank_tol=.1, ve
                         if verbose:print(tmp, "Z", Z.mean(), "c", _solver.coef_.mean())
                 return idxs, tmp
 
-            previous_Z = Z.copy()
+            previous_Z = Z[0].copy()
             state = 0
             statecnt = 0
             inc = 10
             while True:
-                Z = previous_Z.copy()
+                Z[0] = previous_Z.copy()
                 idxs, tmp = waitstable(alpha)
                 if tmp > rbound:
                     if state == 1:
@@ -609,7 +609,7 @@ def dictionary(X, W2, Y,alpha=1e-4, rank=None, DEBUG=0, B2=None, rank_tol=.1, ve
         reg = LinearRegression(copy_X=True, n_jobs=-1)
         assert dcfgs.fc_ridge == 0
         assert dcfgs.dic.alter == 0, "Z changed"
-        reg.fit(Z[:, idxs], reY)
+        reg.fit(Z[0][:, idxs], reY)
         newW2 = reg.coef_[np.newaxis,:,np.newaxis,np.newaxis] * W2[:, idxs, :,:]
         newB2 = reg.intercept_
     elif dcfgs.nonlinear_fc:

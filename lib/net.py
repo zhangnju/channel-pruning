@@ -1637,11 +1637,12 @@ class Net():
         return newidxs, W2, None
 
     def appresb(self,Y_name):
-        residual_B = 0
+        residual_B = {}
+        residual_B[0]=0
         def extractResB(a):
-            nonlocal residual_B
+            #nonlocal residual_B
             feats_dict, _ = self.extract_features([a], points_dict=self._points_dict,save=1)
-            residual_B = (self._feats_dict[a]) - (feats_dict[a])
+            residual_B[0] = (self._feats_dict[a]) - (feats_dict[a])
 
         if dcfgs.res.short == 1:
             if dcfgs.dic.option==cfgs.pruning_options.resnet:
@@ -1676,9 +1677,9 @@ class Net():
                         b1sum = blockproj
                     extractResB(b1sum)
 
-        if not isinstance(residual_B, int):
+        if not isinstance(residual_B[0], int):
             print("apprixiamating A + resB", dcfgs.dic.option)
-        return residual_B
+        return residual_B[0]
 
     def dictionary_kernel(self, X_name, weights, d_prime, Y_name, Y, DEBUG = 0):
         """ channel pruning algorithm wrapper
