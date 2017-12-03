@@ -1286,12 +1286,12 @@ class Net():
         if dcfgs.splitconvrelu:
             pt = self.seperateConvReLU()
         return WPQ, pt, model
-
-    def R3(self): # TODO: Delete VH and ITQ from R3 to eliminate spatial and channel factorization (tried but failed ㅜㅜ) -by Mario
+ 
+    def R3(self):
         speed_ratio = dcfgs.dic.keep
         if speed_ratio not in [3.]: # this if-statement might give a problem if we change the speed-up target. Consider adding more values to the list -by Mario
             NotImplementedError
-        if dcfgs.dic.vh: # TODO: Consider changing this prefixes to obtained more descriptive names for prototxt files - by Mario
+        if dcfgs.dic.vh:
             prefix = '3C'
         else:
             prefix = '2C'
