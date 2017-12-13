@@ -454,7 +454,7 @@ def dictionary(X, W2, Y,alpha=1e-4, rank=None, DEBUG=0, B2=None, rank_tol=.1, ve
         if dcfgs.dic.debug:
             return np.array(c*[True]), c
         _solver.alpha=alpha
-        _solver.fit(Z, reY)
+        _solver.fit(Z[0], reY)
         #_solver.fit(Z, reY)
         if grp_lasso and mtl:
             idxs = _solver.coef_[0] != 0.
@@ -545,7 +545,7 @@ def dictionary(X, W2, Y,alpha=1e-4, rank=None, DEBUG=0, B2=None, rank_tol=.1, ve
                     if cnt == 2:
                         break
                     if 1: 
-                        if verbose:print(tmp, "Z", Z.mean(), "c", _solver.coef_.mean())
+                        if verbose:print(tmp, "Z", Z[0].mean(), "c", _solver.coef_.mean())
                 return idxs, tmp
 
             previous_Z = Z[0].copy()

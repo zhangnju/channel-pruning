@@ -89,7 +89,7 @@ class Net():
             self.kernel = self.pruning_kernel
 
         self.acc=[]
-        self._protocol = 4 # None
+        self._protocol = 2 # None
         if gt_pt is not None:
             print("using gt model")
             self.gt_net = caffe.Net(gt_pt, phase)

@@ -9,7 +9,7 @@ layer {
     bicubic: true
     shuffle: true
     batch_size: 10
-    source: "path/to/ilsvrc12/sourceval.txt"
+    source: "/home/zhangning/source_code/network_compress/channel-pruning/caffe/data/ilsvrc12/val_new.txt"
   }
   transform_param {
     crop_size: 224
@@ -33,7 +33,7 @@ layer {
     bicubic: true
     shuffle: true
     batch_size: 32
-    source: "path/to/ilsvrc12/sourcetrain.txt"
+    source: "/home/zhangning/source_code/network_compress/channel-pruning/caffe/data/ilsvrc12/train_new.txt"
   }
   transform_param {
     crop_size: 224
