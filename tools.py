@@ -9,7 +9,7 @@ import os.path as osp
 import pickle
 import sys
 from multiprocessing import Process, Queue
-
+import google.protobuf.text_format
 import matplotlib.pyplot as plt
 import numpy as np
 from IPython import embed
